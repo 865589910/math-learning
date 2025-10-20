@@ -139,15 +139,15 @@ function spawnPianoTile() {
     const container = document.getElementById('piano-tiles-container');
     const config = PIANO_CONFIG[pianoGameState.difficulty];
     
-    // 随机选择列位置（7列布局），确保不与已存在的钢琴块重叠
+    // 随机选择列位置（5列布局），确保不与已存在的钢琴块重叠
     let column;
     let attempts = 0;
     const maxAttempts = 30; // 最多尝试30次
-    const tileHeight = 240; // 钢琴块高度
-    const minSafeDistance = 300; // 最小安全距离（钢琴块高度 + 60px间隔）
+    const tileHeight = 100; // 钢琴块高度
+    const minSafeDistance = 150; // 最小安全距离（钢琴块高度 + 50px间隔）
     
     do {
-        column = Math.floor(Math.random() * 7);
+        column = Math.floor(Math.random() * 5);
         attempts++;
         
         // 检查该列是否有钢琴块
@@ -191,8 +191,8 @@ function spawnPianoTile() {
     tile.style.backgroundColor = '#00f2fe';
     tile.style.color = 'white';
     
-    // 设置列位置
-    tile.style.left = `${column * 14.28}%`;
+    // 设置列位置（5列布局：每列20%宽度）
+    tile.style.left = `${column * 20}%`;
     tile.style.top = '0px';
     
     // 点击事件
@@ -396,8 +396,8 @@ function updatePianoGame() {
         tile.y += pianoGameState.speed;
         tile.element.style.top = `${tile.y}px`;
         
-        // 检查是否掉落到底部
-        if (tile.y > containerHeight - 240) {
+        // 检查是否掉落到底部（根据新高度100px调整）
+        if (tile.y > containerHeight - 100) {
             // 如果是正确的钢琴块掉落，扣除生命值
             if (tile.isCorrect) {
                 pianoGameState.lives--;

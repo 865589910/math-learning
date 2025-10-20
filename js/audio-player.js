@@ -1,11 +1,14 @@
 /**
  * 音频播放器 - 播放预生成的高质量AI语音MP3文件
+ * 优化版本:预加载机制,减少延迟
  */
 
 class AudioPlayer {
     constructor() {
         this.currentAudio = null;
         this.isPlaying = false;
+        this.audioCache = new Map(); // 音频缓存
+        this.maxCacheSize = 50; // 最大缓存数量
         
         // 音频文件路径映射
         this.audioBaseDir = 'audio/';
@@ -37,10 +40,45 @@ class AudioPlayer {
             'multiplicationProblems': 'section4_multiplicationProblems',
             'divisionProblems': 'section4_divisionProblems'
         };
+        
+        // 预加载常用音频
+        this.preloadCommonAudio();
     }
     
     /**
-     * 播放字词语音
+     * 预加载常用音频(异步)
+     */
+    preloadCommonAudio() {
+        // 预加载数字1-10的语音
+        const commonWords = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+        setTimeout(() => {
+            commonWords.forEach(word => {
+                this.preloadAudio(word, 'numbers');
+            });
+        }, 1000); // 页面加载1秒后开始预加载
+    }
+    
+    /**
+     * 预加载单个音频
+     */
+    preloadAudio(word, category = '') {
+        const audioPath = this.getAudioPath(word, category);
+        if (!this.audioCache.has(audioPath)) {
+            const audio = new Audio();
+            audio.preload = 'auto';
+            audio.src = audioPath;
+            this.audioCache.set(audioPath, audio);
+            
+            // 控制缓存大小
+            if (this.audioCache.size > this.maxCacheSize) {
+                const firstKey = this.audioCache.keys().next().value;
+                this.audioCache.delete(firstKey);
+            }
+        }
+    }
+    
+    /**
+     * 播放字词语音(优化版)
      * @param {string} word - 要朗读的字词
      * @param {string} category - 字词所属分类
      */
@@ -53,12 +91,27 @@ class AudioPlayer {
         // 构建音频文件路径
         const audioPath = this.getAudioPath(word, category);
         
-        // 创建音频对象
-        this.currentAudio = new Audio(audioPath);
+        // 尝试从缓存获取
+        let audio = this.audioCache.get(audioPath);
+        
+        if (!audio) {
+            // 如果缓存中没有,创建新的音频对象
+            audio = new Audio(audioPath);
+            this.audioCache.set(audioPath, audio);
+            
+            // 控制缓存大小
+            if (this.audioCache.size > this.maxCacheSize) {
+                const firstKey = this.audioCache.keys().next().value;
+                this.audioCache.delete(firstKey);
+            }
+        }
+        
+        this.currentAudio = audio;
         this.isPlaying = true;
         
-        // 播放音频
-        this.currentAudio.play().then(() => {
+        // 重置播放位置并播放
+        audio.currentTime = 0;
+        audio.play().then(() => {
             console.log('🔊 播放:', word);
         }).catch(error => {
             console.error('播放失败:', error);
@@ -67,13 +120,13 @@ class AudioPlayer {
         });
         
         // 播放结束事件
-        this.currentAudio.onended = () => {
+        audio.onended = () => {
             this.isPlaying = false;
             console.log('✅ 播放完成');
         };
         
         // 错误处理
-        this.currentAudio.onerror = () => {
+        audio.onerror = () => {
             console.error('音频加载失败:', audioPath);
             this.isPlaying = false;
         };

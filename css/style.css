@@ -2264,11 +2264,12 @@ footer {
     }
     
     .piano-tiles-container {
-        height: 500px;
+        height: 350px;
     }
     
     .piano-tile {
-        height: 140px;
+        height: 90px;
+        width: calc(20% - 8px);
     }
     
     .tile-text {
@@ -2316,12 +2317,13 @@ footer {
     }
 
     .piano-tiles-container {
-        height: 450px;
+        height: 320px;
         margin: 15px 0;
     }
     
     .piano-tile {
-        height: 120px;
+        height: 80px;
+        width: calc(20% - 6px);
     }
     
     .tile-text {
@@ -3038,7 +3040,7 @@ footer {
 
 .piano-tiles-container {
     position: relative;
-    height: 500px;
+    height: 400px;
     background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 15px;
     overflow: hidden;
@@ -3048,8 +3050,8 @@ footer {
 
 .piano-tile {
     position: absolute;
-    width: calc(14.28% - 10px);
-    height: 240px;
+    width: calc(20% - 10px);
+    height: 100px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
