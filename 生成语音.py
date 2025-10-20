@@ -119,13 +119,19 @@ learning_data = {
         "比少"
     ],
     "section4_multiplicationProblems": [
+        "每……有……",
         "每",
         "倍",
-        "每个"
+        "积",
+        "几个几",
+        "一共"
     ],
     "section4_divisionProblems": [
         "平均分",
-        "每几个装一"
+        "每几个装一",
+        "商",
+        "平均每个是几",
+        "能分几份"
     ]
 }
 

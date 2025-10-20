@@ -39,6 +39,7 @@ function initializePage() {
     renderWords('subtraction-problems', learningData.section4.subtractionProblems, 'subtractionProblems');
     renderWords('multiplication-problems', learningData.section4.multiplicationProblems, 'multiplicationProblems');
     renderWords('division-problems', learningData.section4.divisionProblems, 'divisionProblems');
+    renderWords('confusing-keywords', learningData.section4.confusingKeywords, 'confusingKeywords');
 }
 
 // 设置选项卡导航功能
@@ -93,8 +94,10 @@ function showWordModal(wordData) {
     // 设置拼音
     document.getElementById('modal-pinyin').textContent = wordData.pinyin;
     
-    // 设置解释
-    document.getElementById('modal-explanation').innerHTML = wordData.explanation.replace(/\n/g, '<br>');
+    // 设置解释（不包含例题）
+    const explanationDiv = document.getElementById('modal-explanation');
+    let explanationHTML = wordData.explanation.replace(/\n/g, '<br>');
+    explanationDiv.innerHTML = explanationHTML;
     
     // 绘制字词在米字格中
     drawWordInGrid(wordData.word);
@@ -118,11 +121,68 @@ function showWordModal(wordData) {
         }
     }
     
+    // 在练习区域后面添加例题（如果有）
+    let examplesContainer = document.getElementById('examples-container');
+    if (!examplesContainer) {
+        // 创建例题容器
+        examplesContainer = document.createElement('div');
+        examplesContainer.id = 'examples-container';
+        examplesContainer.className = 'examples-container';
+        document.querySelector('.modal-body').appendChild(examplesContainer);
+    }
+    
+    // 清空之前的例题
+    examplesContainer.innerHTML = '';
+    
+    // 如果有例题，添加例题展示
+    if (wordData.examples && wordData.examples.length > 0) {
+        let examplesHTML = '<div class="examples-section">';
+        examplesHTML += '<h5>📝 例题：</h5>';
+        wordData.examples.forEach((example, index) => {
+            const exampleId = `example-${Date.now()}-${index}`;
+            examplesHTML += `
+                <div class="example-item">
+                    <div class="example-number">例题${index + 1}：</div>
+                    <div class="example-question">${example.question}</div>
+                    <button class="show-answer-btn" onclick="toggleAnswer('${exampleId}')" data-shown="false">
+                        👁️ 查看答案
+                    </button>
+                    <div class="example-answer-section" id="${exampleId}" style="display: none;">
+                        <div class="example-analysis"><strong>💡 分析：</strong>${example.analysis}</div>
+                        <div class="example-formula"><strong>🔢 算式：</strong>${example.formula}</div>
+                        <div class="example-answer"><strong>✅ 答案：</strong>${example.answer}</div>
+                    </div>
+                </div>
+            `;
+        });
+        examplesHTML += '</div>';
+        examplesContainer.innerHTML = examplesHTML;
+        examplesContainer.style.display = 'block';
+    } else {
+        examplesContainer.style.display = 'none';
+    }
+    
     // 显示模态框
     modal.style.display = 'block';
     
     // 防止body滚动
     document.body.style.overflow = 'hidden';
+}
+
+// 切换答案显示/隐藏
+function toggleAnswer(exampleId) {
+    const answerSection = document.getElementById(exampleId);
+    const button = document.querySelector(`button[onclick="toggleAnswer('${exampleId}')"]`);
+    
+    if (answerSection.style.display === 'none') {
+        answerSection.style.display = 'block';
+        button.innerHTML = '👁️‍🗨️ 隐藏答案';
+        button.setAttribute('data-shown', 'true');
+    } else {
+        answerSection.style.display = 'none';
+        button.innerHTML = '👁️ 查看答案';
+        button.setAttribute('data-shown', 'false');
+    }
 }
 
 // 在米字格中绘制字词
