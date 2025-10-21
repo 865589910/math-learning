@@ -1394,9 +1394,18 @@ footer {
     }
 
     .game-result {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         font-size: 1em;
-        padding: 15px;
-        margin-top: 15px;
+        padding: 20px;
+        margin: 0;
+        max-width: 85%;
+        max-height: 80vh;
+        overflow-y: auto;
+        z-index: 1001;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     }
 
     .game-card {
@@ -2232,16 +2241,23 @@ footer {
 }
 
 .game-result {
-    margin-top: 25px;
-    padding: 25px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border-radius: 15px;
     text-align: center;
     font-size: 1.3em;
     font-weight: bold;
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     animation: resultShow 0.5s ease-out;
+    z-index: 1001;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 @keyframes resultShow {
@@ -2650,52 +2666,79 @@ footer {
     }
 
     .piano-stats {
-        gap: 10px;
-        margin: 15px 0;
+        gap: 8px; /* 减小间距 */
+        margin: 12px 0; /* 减小上下边距 */
+        flex-wrap: nowrap; /* 强制单行显示 */
     }
 
     .piano-stat {
-        padding: 12px;
+        padding: 8px 6px; /* 减小内边距 */
+        flex: 1; /* 平均分配宽度 */
+        min-width: 0; /* 允许缩小 */
     }
 
     .piano-stat-label {
-        font-size: 0.85em;
-        margin-bottom: 6px;
+        font-size: 0.75em; /* 进一步缩小字体 */
+        margin-bottom: 4px;
     }
 
     .piano-stat-value {
-        font-size: 1.6em;
+        font-size: 1.3em; /* 缩小数值字体 */
     }
 
     .piano-lives {
-        font-size: 1.4em;
-        gap: 5px;
+        font-size: 1.2em; /* 缩小爱心大小 */
+        gap: 3px;
     }
 
     .piano-tiles-container {
-        height: 260px; /* 从320px降低至260px，让血量和游戏界面同时显示 */
-        margin: 15px 0;
+        height: 200px; /* 再次缩小容器高度以适应屏幕 */
+        margin: 12px 0;
     }
     
     .piano-tile {
-        width: 120px; /* 手机端调整宽度 */
-        height: 65px; /* 从80px降低至65px，让容器内能显示更多钢琴块 */
+        width: 120px;
+        height: 65px;
     }
     
     .tile-text {
-        font-size: 0.8em; /* 从0.85em降低至0.8em，适应更小的钢琴块 */
-        padding: 6px; /* 从8px降低至6px */
+        font-size: 0.8em;
+        padding: 6px;
     }
 }
 
-/* 游戏结果样式 */
+/* 游戏结果遮罩层 */
+.game-result-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.game-result-overlay.show {
+    display: block;
+}
+
+/* 游戏结果样式 - 居中显示 */
 .game-result {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
     border-radius: 15px;
     padding: 30px;
-    margin: 20px 0;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .result-icon {
