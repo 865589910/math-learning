@@ -2673,7 +2673,7 @@ footer {
     }
 
     .piano-tiles-container {
-        height: 320px;
+        height: 260px; /* 从320px降低到60px，让血量和游戏界面同时显示 */
         margin: 15px 0;
     }
     

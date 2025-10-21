@@ -372,13 +372,23 @@ function updateWalls() {
 
 // 检查碰撞
 function checkCollision() {
-    const playerY = 750; // 玩家的Y坐标（适应800px高度的容器）
+    const container = document.getElementById('math-wall-container');
+    if (!container) return;
+    
+    const containerHeight = container.clientHeight;
+    const playerBottomOffset = 30; // 玩家离底部的距离（与CSS中的bottom保持一致）
+    const playerY = containerHeight - playerBottomOffset; // 动态计算玩家Y坐标
+    
+    console.log('🎯 碰撞检测 - 容器高度:', containerHeight, '玩家Y:', playerY, '玩家位置:', mathWallState.playerPosition);
     
     mathWallState.walls.forEach(wall => {
         // 检查墙是否到达玩家位置（增加容错范围）
         if (wall.y >= playerY - 60 && wall.y <= playerY + 60 && wall.lane === mathWallState.playerPosition) {
+            console.log('💥 碰撞检测触发! 墙Y:', wall.y, '道数:', wall.lane, '内容:', wall.content, '正确:', wall.isCorrect);
+            
             if (wall.isCorrect) {
                 // 正确答案
+                console.log('✅ 正确答案！分数+1');
                 if (mathWallState.difficulty === 5) {
                     // 无尽模式：积分+2，通过墙数+1
                     mathWallState.score += 2;
@@ -410,6 +420,7 @@ function checkCollision() {
                 }
             } else {
                 // 错误答案
+                console.log('❌ 错误答案！生命-1');
                 mathWallState.lives--;
                 updateMathWallLives();
                 
