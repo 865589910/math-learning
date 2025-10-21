@@ -2673,18 +2673,18 @@ footer {
     }
 
     .piano-tiles-container {
-        height: 260px; /* 从320px降低到60px，让血量和游戏界面同时显示 */
+        height: 260px; /* 从320px降低至260px，让血量和游戏界面同时显示 */
         margin: 15px 0;
     }
     
     .piano-tile {
         width: 120px; /* 手机端调整宽度 */
-        height: 80px;
+        height: 65px; /* 从80px降低至65px，让容器内能显示更多钢琴块 */
     }
     
     .tile-text {
-        font-size: 0.85em;
-        padding: 8px;
+        font-size: 0.8em; /* 从0.85em降低至0.8em，适应更小的钢琴块 */
+        padding: 6px; /* 从8px降低至6px */
     }
 }
 
