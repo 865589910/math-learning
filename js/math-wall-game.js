@@ -500,10 +500,10 @@ function renderWalls() {
         }, { passive: false });
         
         // 触摸事件（移动设备）
-        wallElement.addEventListener('touchend', function(e) {
+        wallElement.addEventListener('touchstart', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log('✅ 触摸了墙块，道数:', wall.lane, '内容:', wall.content);
+            console.log('👍 触摸开始，道数:', wall.lane, '内容:', wall.content);
             if (!mathWallState.gameOver) {
                 mathWallState.playerPosition = wall.lane;
                 updatePlayerPosition();
@@ -511,11 +511,18 @@ function renderWalls() {
                 // 添加触摸视觉反馈
                 this.style.transform = 'scale(0.95)';
                 this.style.boxShadow = '0 8px 20px rgba(155, 89, 182, 0.7)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                    this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
-                }, 100);
             }
+        }, { passive: false });
+        
+        wallElement.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('✅ 触摸结束，道数:', wall.lane, '内容:', wall.content);
+            // 恢复样式
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+            }, 100);
         }, { passive: false });
         
         container.appendChild(wallElement);

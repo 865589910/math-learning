@@ -3104,6 +3104,7 @@ footer {
     transition: left 0.2s ease-out;
     filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
     z-index: 100;
+    pointer-events: none; /* 玩家不拦截点击事件，让点击穿透到墙块 */
 }
 
 /* 墙 */
@@ -3127,6 +3128,8 @@ footer {
     user-select: none; /* 禁止文本选择 */
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
+    touch-action: manipulation; /* 优化移动端触摸响应 */
+    -webkit-touch-callout: none; /* 禁止iOS长按菜单 */
 }
 
 /* 控制提示 */
