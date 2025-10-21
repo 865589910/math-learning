@@ -8,8 +8,9 @@ const mathWallState = {
     playerPosition: 0, // 玩家位置 (0, 1, 2, 3, 4 对应五道墙)
     walls: [], // 下落的墙
     currentTarget: null, // 当前目标（数字或算式）
-    wallSpeed: 0.5, // 墙下落速度（所有难度统一速度）
-    wallInterval: 3500, // 生成墙的间隔（毫秒，增加间隔）
+    wallSpeed: 1.0, // 墙下落速度
+    customSpeed: 1.0, // 用户自定义速度
+    wallInterval: 2800, // 生成墙的间隔（毫秒）
     lastWallTime: 0,
     animationId: null,
     startTime: null,
@@ -19,9 +20,14 @@ const mathWallState = {
     lanes: 2, // 墙道数量，根据难度调整
     // 无尽模式专用
     passedWalls: 0, // 无尽模式已通过的墙数
-    baseSpeed: 0.5, // 基础速度
+    baseSpeed: 1.0, // 基础速度
     baseLanes: 2 // 基础墙道数
 };
+
+// 更新速度显示
+function updateWallSpeedDisplay(value) {
+    document.getElementById('wall-speed-value').textContent = parseFloat(value).toFixed(1);
+}
 
 // 打开游戏模态框
 function openMathWallGame() {
@@ -61,35 +67,39 @@ function backToMathWallDifficulty() {
 function selectMathWallDifficulty(difficulty) {
     mathWallState.difficulty = difficulty;
     
-    // 根据难度设置墙道数量（提高速度）
+    // 获取用户选择的速度
+    const speedSlider = document.getElementById('wall-speed-slider');
+    mathWallState.customSpeed = parseFloat(speedSlider.value);
+    
+    // 根据难度设置墙道数量
     if (difficulty === 1) {
         mathWallState.lanes = 2; // 两道墙
-        mathWallState.wallSpeed = 1.0; // 加快速度（1.0像素/帧）
-        mathWallState.wallInterval = 2800; // 缩短间隔至2.8秒
+        mathWallState.wallSpeed = mathWallState.customSpeed;
+        mathWallState.wallInterval = 2800;
         mathWallState.lives = 3;
     } else if (difficulty === 2) {
         mathWallState.lanes = 2; // 两道墙（新增难度）
-        mathWallState.wallSpeed = 1.0; // 加快速度
+        mathWallState.wallSpeed = mathWallState.customSpeed;
         mathWallState.wallInterval = 2800;
         mathWallState.lives = 3;
     } else if (difficulty === 3) {
         mathWallState.lanes = 3; // 三道墙（原难度二）
-        mathWallState.wallSpeed = 1.0; // 加快速度
+        mathWallState.wallSpeed = mathWallState.customSpeed;
         mathWallState.wallInterval = 2800;
         mathWallState.lives = 3;
     } else if (difficulty === 4) {
         mathWallState.lanes = 5; // 五道墙（原难度三）
-        mathWallState.wallSpeed = 1.0; // 加快速度
+        mathWallState.wallSpeed = mathWallState.customSpeed;
         mathWallState.wallInterval = 2800;
         mathWallState.lives = 3;
     } else if (difficulty === 5) {
-        // 无尽模式
+        // 无尽模式：固定开局速度0.6，不受滑块影响
         mathWallState.lanes = 2; // 初始两道墙
-        mathWallState.wallSpeed = 1.0; // 加快初始速度
+        mathWallState.wallSpeed = 0.6; // 固定开局速度
         mathWallState.wallInterval = 2800;
         mathWallState.lives = 5; // 五条命
         mathWallState.baseLanes = 2;
-        mathWallState.baseSpeed = 1.0; // 加快基础速度
+        mathWallState.baseSpeed = 0.6; // 固定基础速度
         mathWallState.passedWalls = 0;
     }
     
@@ -428,7 +438,10 @@ function removeWallGroup(groupId) {
 // 渲染墙
 function renderWalls() {
     const container = document.getElementById('math-wall-container');
-    if (!container) return;
+    if (!container) {
+        console.error('游戏容器未找到');
+        return;
+    }
     
     const containerWidth = container.clientWidth;
     const laneWidth = containerWidth / mathWallState.lanes;
@@ -436,6 +449,8 @@ function renderWalls() {
     // 移除所有现有的墙元素
     const existingWalls = container.querySelectorAll('.math-wall');
     existingWalls.forEach(w => w.remove());
+    
+    console.log('当前墙块数量:', mathWallState.walls.length);
     
     // 渲染所有墙
     mathWallState.walls.forEach(wall => {
@@ -450,6 +465,58 @@ function renderWalls() {
         wallElement.style.background = wall.color;
         // 保持统一的边框颜色
         wallElement.style.borderColor = '#9b59b6';
+        
+        // 添加点击事件：点击墙就移动到对应的位置
+        // CSS中已设置 cursor: pointer 和 pointer-events: auto
+        
+        // 鼠标悬停效果（仅桌面端）
+        wallElement.addEventListener('mouseenter', function() {
+            if (!mathWallState.gameOver) {
+                this.style.transform = 'scale(1.08)';
+                this.style.boxShadow = '0 8px 25px rgba(155, 89, 182, 0.6)';
+            }
+        });
+        
+        wallElement.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+        });
+        
+        // 点击事件：移动到该墙下方
+        wallElement.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('✅ 点击了墙块，道数:', wall.lane, '内容:', wall.content);
+            if (!mathWallState.gameOver) {
+                mathWallState.playerPosition = wall.lane;
+                updatePlayerPosition();
+                
+                // 添加点击视觉反馈
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            }
+        }, { passive: false });
+        
+        // 触摸事件（移动设备）
+        wallElement.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('✅ 触摸了墙块，道数:', wall.lane, '内容:', wall.content);
+            if (!mathWallState.gameOver) {
+                mathWallState.playerPosition = wall.lane;
+                updatePlayerPosition();
+                
+                // 添加触摸视觉反馈
+                this.style.transform = 'scale(0.95)';
+                this.style.boxShadow = '0 8px 20px rgba(155, 89, 182, 0.7)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+                }, 100);
+            }
+        }, { passive: false });
         
         container.appendChild(wallElement);
     });
@@ -468,7 +535,7 @@ function moveMathWallPlayer(direction) {
     updatePlayerPosition();
 }
 
-// 键盘控制
+// 键盘控制（保留，与点击墙块功能并存）
 document.addEventListener('keydown', function(event) {
     if (!mathWallState.gameOver && document.getElementById('math-wall-game-screen').style.display === 'block') {
         if (event.key === 'ArrowLeft' || event.key === 'a' || event.key === 'A') {

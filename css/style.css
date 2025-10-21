@@ -553,6 +553,23 @@ main {
     white-space: pre-wrap;
 }
 
+/* 图形展示区域 */
+.shape-container {
+    margin-top: 15px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#shape-canvas {
+    max-width: 100%;
+    height: auto;
+}
+
 /* 例题区域样式 */
 .examples-section {
     margin-top: 0;
@@ -745,6 +762,92 @@ main {
     margin-top: 25px;
     padding-top: 20px;
     border-top: 2px dashed #e0e0e0;
+}
+
+/* 百数表3×3表格样式 */
+.grid-table-container {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.answer-label {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #51cf66;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.hundred-table-grid {
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hundred-table-grid td {
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    border: 2px solid #667eea;
+    background: #f8f9ff;
+    transition: all 0.3s;
+}
+
+.hundred-table-grid td:hover {
+    background: #e8ecff;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.hundred-table-grid td.center-cell {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 1.8em;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.hundred-table-grid td.center-cell:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+    transform: scale(1.08);
+}
+
+/* 空格子样式（显示问号） */
+.hundred-table-grid td.empty-cell {
+    background: #ffffff;
+    color: #ccc;
+    font-size: 2em;
+    border: 2px dashed #ccc;
+}
+
+.hundred-table-grid td.empty-cell:hover {
+    background: #f8f9ff;
+    color: #999;
+    border-color: #999;
+}
+
+/* 填充后的表格（答案区域） */
+.hundred-table-grid.filled td {
+    animation: fillIn 0.5s ease-out;
+}
+
+@keyframes fillIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .practice-grid {
@@ -1449,6 +1552,125 @@ footer {
     color: #666;
     margin-bottom: 25px;
     text-align: center;
+}
+
+/* 游戏规则按钮 */
+.game-rules-btn {
+    position: absolute;
+    top: 20px;
+    right: 60px;
+    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.game-rules-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #19547b 0%, #ffd89b 100%);
+}
+
+/* 速度调节器样式 */
+.speed-control-section {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.speed-control-title {
+    font-size: 1.3em;
+    color: #00796b;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.speed-control-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.speed-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.speed-label {
+    font-size: 1.1em;
+    color: #00695c;
+    font-weight: 500;
+}
+
+.speed-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #4caf50 0%, #ffc107 50%, #f44336 100%);
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #00796b;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.speed-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.speed-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #00796b;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.speed-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.speed-display {
+    text-align: center;
+    font-size: 1.2em;
+    color: #00796b;
+    font-weight: bold;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.speed-display span {
+    color: #d32f2f;
+    font-size: 1.3em;
 }
 
 .difficulty-options {
@@ -2286,7 +2508,7 @@ footer {
 
 .piano-tiles-container {
     position: relative;
-    height: 1000px;
+    height: 1000px; /* 还原容器高度 */
     min-height: 900px;
     background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 15px;
@@ -2297,6 +2519,8 @@ footer {
 
 .piano-tile {
     position: absolute;
+    width: calc(20% - 10px); /* 5列布局 */
+    height: 350px; /* 钢琴块高度350px */
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
@@ -2400,8 +2624,8 @@ footer {
     }
     
     .piano-tile {
+        width: 150px; /* 平板端调整宽度 */
         height: 90px;
-        width: calc(20% - 8px);
     }
     
     .tile-text {
@@ -2454,8 +2678,8 @@ footer {
     }
     
     .piano-tile {
+        width: 120px; /* 手机端调整宽度 */
         height: 80px;
-        width: calc(20% - 6px);
     }
     
     .tile-text {
@@ -2896,7 +3120,13 @@ footer {
     color: #333;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     border: 3px solid #9b59b6; /* 统一的边框颜色 */
-    transition: all 0.1s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease; /* 只对transform和box-shadow使用过渡 */
+    z-index: 50; /* 确保墙块在玩家下方但可点击 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+    pointer-events: auto; /* 确保可以接收点击事件 */
+    user-select: none; /* 禁止文本选择 */
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
 }
 
 /* 控制提示 */
@@ -3172,7 +3402,8 @@ footer {
 
 .piano-tiles-container {
     position: relative;
-    height: 400px;
+    height: 1000px; /* 容器高度 - 可容纳约2-3个钢琴块 */
+    min-height: 900px;
     background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 15px;
     overflow: hidden;
@@ -3183,7 +3414,7 @@ footer {
 .piano-tile {
     position: absolute;
     width: calc(20% - 10px);
-    height: 100px;
+    height: 350px; /* 钢琴块高度调整为350px */
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
@@ -4361,5 +4592,201 @@ footer {
 
     .end-actions .shopping-btn {
         width: 100%;
+    }
+}
+
+/* 游戏规则模态框样式 */
+.game-rules-modal {
+    display: flex;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+.game-rules-content {
+    background: white;
+    margin: 20px;
+    padding: 0;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.game-rules-close {
+    position: sticky;
+    top: 0;
+    right: 0;
+    float: right;
+    font-size: 2em;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    padding: 15px 25px;
+    z-index: 10;
+    background: white;
+    border-radius: 0 20px 0 0;
+    transition: all 0.3s;
+}
+
+.game-rules-close:hover {
+    color: #f5576c;
+    transform: rotate(90deg);
+}
+
+.game-rules-title {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 30px;
+    margin: 0;
+    border-radius: 20px 20px 0 0;
+    font-size: 1.8em;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rules-content {
+    padding: 30px;
+    line-height: 1.8;
+}
+
+.rules-content h3 {
+    color: #667eea;
+    font-size: 1.4em;
+    margin: 25px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.rules-content h3:first-child {
+    margin-top: 0;
+}
+
+.rules-content p {
+    color: #333;
+    font-size: 1.05em;
+    margin-bottom: 15px;
+}
+
+.rules-content ul,
+.rules-content ol {
+    margin: 15px 0;
+    padding-left: 25px;
+}
+
+.rules-content li {
+    color: #555;
+    font-size: 1.05em;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.rules-content strong {
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* 手机端响应式 - 游戏规则 */
+@media (max-width: 768px) {
+    .game-rules-btn {
+        position: relative;
+        top: auto;
+        right: auto;
+        display: block;
+        margin: 15px auto;
+        padding: 10px 18px;
+        font-size: 0.9em;
+    }
+    
+    /* 速度调节器 - 手机端 */
+    .speed-control-section {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .speed-control-title {
+        font-size: 1.1em;
+        margin-bottom: 12px;
+    }
+    
+    .speed-label {
+        font-size: 0.9em;
+    }
+    
+    .speed-slider {
+        height: 6px;
+    }
+    
+    .speed-slider::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .speed-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .speed-display {
+        font-size: 1em;
+        padding: 8px;
+    }
+    
+    .game-rules-content {
+        width: 95%;
+        margin: 10px;
+        max-height: 95vh;
+    }
+    
+    .game-rules-title {
+        font-size: 1.4em;
+        padding: 20px 15px;
+    }
+    
+    .game-rules-close {
+        font-size: 1.8em;
+        padding: 12px 20px;
+    }
+    
+    .rules-content {
+        padding: 20px 15px;
+    }
+    
+    .rules-content h3 {
+        font-size: 1.2em;
+        margin: 20px 0 12px 0;
+    }
+    
+    .rules-content p,
+    .rules-content li {
+        font-size: 0.95em;
     }
 }

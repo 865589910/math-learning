@@ -16,6 +16,11 @@ OUTPUT_DIR = "audio"  # 音频文件输出目录
 RATE = "-4%"  # 语速：稍慢一点，适合学习
 VOLUME = "+0%"  # 音量：正常
 
+# 多音字正确读音映射（使用同音字或数字标调拼音）
+POLYPHONE_MAP = {
+    '行': '航',  # 行列的行，用同音字"航"来生成正确读音
+}
+
 # 所有需要生成的字词数据
 learning_data = {
     "section1_numbers": [
@@ -106,21 +111,43 @@ learning_data = {
     ],
     "section4_additionProblems": [
         "一共",
+        "总共",
+        "共有",
+        "一共或总共或共有",
+        "和",
+        "增加",
+        "添上",
+        "增加或添上",
         "合起来",
+        "倒入",
         "飞来了",
-        "增加"
+        "游来了",
+        "开来了"
     ],
     "section4_subtractionProblems": [
         "还剩",
+        "剩下",
+        "还剩或剩下",
         "比多",
+        "比少",
+        "比多或比少",
+        "多多少",
+        "少多少",
+        "多多少或少多少",
         "花了",
+        "用去",
+        "减少",
+        "减少或用去",
         "送给",
         "飞走了",
-        "比少"
+        "游走了",
+        "飞走或游走",
+        "相差"
     ],
     "section4_multiplicationProblems": [
         "每……有……",
         "每",
+        "每……有……或每",
         "倍",
         "积",
         "几个几",
@@ -174,8 +201,17 @@ async def generate_audio(word, category=""):
             print(f"  ⏭️  跳过 {word} (已存在)")
             return True
         
-        # 生成音频
-        communicate = edge_tts.Communicate(word, VOICE, rate=RATE, volume=VOLUME)
+        # 检查是否是多音字，如果是，使用拼音代替
+        if word in POLYPHONE_MAP:
+            # 对于多音字，直接使用拼音生成语音
+            text_to_speak = POLYPHONE_MAP[word]
+            print(f"  🔊 多音字修正: {word} -> 使用拼音 {text_to_speak}")
+            communicate = edge_tts.Communicate(text_to_speak, VOICE, rate=RATE, volume=VOLUME)
+        else:
+            # 普通字词
+            text_to_speak = word
+            communicate = edge_tts.Communicate(word, VOICE, rate=RATE, volume=VOLUME)
+        
         await communicate.save(filepath)
         
         print(f"  ✅ 生成 {word} -> {filepath}")

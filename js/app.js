@@ -97,7 +97,19 @@ function showWordModal(wordData) {
     // 设置解释（不包含例题）
     const explanationDiv = document.getElementById('modal-explanation');
     let explanationHTML = wordData.explanation.replace(/\n/g, '<br>');
+    
+    // 如果是几何图形，添加图形绘制
+    const shapeWords = ['长方形', '正方形', '圆', '三角形', '平行四边形', '长方体', '正方体', '圆柱', '球', '三棱柱'];
+    if (shapeWords.includes(wordData.word)) {
+        explanationHTML += '<div class="shape-container" id="shape-canvas-container"><canvas id="shape-canvas" width="300" height="200"></canvas></div>';
+    }
+    
     explanationDiv.innerHTML = explanationHTML;
+    
+    // 如果是几何图形，绘制图形
+    if (shapeWords.includes(wordData.word)) {
+        setTimeout(() => drawShape(wordData.word), 10);
+    }
     
     // 绘制字词在米字格中
     drawWordInGrid(wordData.word);
@@ -144,13 +156,65 @@ function showWordModal(wordData) {
                 <div class="example-item">
                     <div class="example-number">例题${index + 1}：</div>
                     <div class="example-question">${example.question}</div>
+            `;
+            
+            // 如果有gridData，先显示只有中心数字的空表格
+            if (example.gridData) {
+                const centerNum = example.gridData.center;
+                examplesHTML += '<div class="grid-table-container">';
+                examplesHTML += '<table class="hundred-table-grid">';
+                for (let row = 0; row < 3; row++) {
+                    examplesHTML += '<tr>';
+                    for (let col = 0; col < 3; col++) {
+                        const isCenter = (row === 1 && col === 1);
+                        const cellClass = isCenter ? 'center-cell' : 'empty-cell';
+                        const cellContent = isCenter ? centerNum : '?';
+                        examplesHTML += `<td class="${cellClass}">${cellContent}</td>`;
+                    }
+                    examplesHTML += '</tr>';
+                }
+                examplesHTML += '</table>';
+                examplesHTML += '</div>';
+            }
+            
+            examplesHTML += `
                     <button class="show-answer-btn" onclick="toggleAnswer('${exampleId}')" data-shown="false">
                         👁️ 查看答案
                     </button>
                     <div class="example-answer-section" id="${exampleId}" style="display: none;">
+            `;
+            
+            // 在答案区域显示完整的表格
+            if (example.gridData) {
+                const grid = example.gridData.grid;
+                examplesHTML += '<div class="grid-table-container">';
+                examplesHTML += '<div class="answer-label">✅ 完整表格：</div>';
+                examplesHTML += '<table class="hundred-table-grid filled">';
+                for (let row = 0; row < 3; row++) {
+                    examplesHTML += '<tr>';
+                    for (let col = 0; col < 3; col++) {
+                        const cellClass = (row === 1 && col === 1) ? 'center-cell' : '';
+                        examplesHTML += `<td class="${cellClass}">${grid[row][col]}</td>`;
+                    }
+                    examplesHTML += '</tr>';
+                }
+                examplesHTML += '</table>';
+                examplesHTML += '</div>';
+            }
+            
+            examplesHTML += `
                         <div class="example-analysis"><strong>💡 分析：</strong>${example.analysis}</div>
-                        <div class="example-formula"><strong>🔢 算式：</strong>${example.formula}</div>
-                        <div class="example-answer"><strong>✅ 答案：</strong>${example.answer}</div>
+            `;
+            
+            // 只有当formula和answer不为空时才显示
+            if (example.formula) {
+                examplesHTML += `<div class="example-formula"><strong>🔢 算式：</strong>${example.formula}</div>`;
+            }
+            if (example.answer) {
+                examplesHTML += `<div class="example-answer"><strong>✅ 答案：</strong>${example.answer}</div>`;
+            }
+            
+            examplesHTML += `
                     </div>
                 </div>
             `;
@@ -504,4 +568,286 @@ function speakCurrentWord() {
     
     // 播放音频
     audioPlayer.play(currentWord.word, category);
+}
+
+/**
+ * 绘制几何图形
+ */
+function drawShape(shapeName) {
+    const canvas = document.getElementById('shape-canvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#667eea';
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.1)';
+    ctx.lineWidth = 3;
+    
+    switch(shapeName) {
+        case '长方形':
+            // 绘制长方形
+            ctx.beginPath();
+            ctx.rect(centerX - 100, centerY - 60, 200, 120);
+            ctx.fill();
+            ctx.stroke();
+            break;
+            
+        case '正方形':
+            // 绘制正方形
+            ctx.beginPath();
+            ctx.rect(centerX - 70, centerY - 70, 140, 140);
+            ctx.fill();
+            ctx.stroke();
+            break;
+            
+        case '圆':
+            // 绘制圆
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 70, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            break;
+            
+        case '三角形':
+            // 绘制三角形
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - 80);
+            ctx.lineTo(centerX - 90, centerY + 60);
+            ctx.lineTo(centerX + 90, centerY + 60);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            break;
+            
+        case '平行四边形':
+            // 绘制平行四边形
+            ctx.beginPath();
+            ctx.moveTo(centerX - 70, centerY - 50);
+            ctx.lineTo(centerX + 30, centerY - 50);
+            ctx.lineTo(centerX + 70, centerY + 50);
+            ctx.lineTo(centerX - 30, centerY + 50);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            break;
+            
+        case '长方体':
+            // 绘制长方体（立体效果）
+            drawCuboid(ctx, centerX, centerY);
+            break;
+            
+        case '正方体':
+            // 绘制正方体
+            drawCube(ctx, centerX, centerY);
+            break;
+            
+        case '圆柱':
+            // 绘制圆柱
+            drawCylinder(ctx, centerX, centerY);
+            break;
+            
+        case '球':
+            // 绘制球（带阴影）
+            drawSphere(ctx, centerX, centerY);
+            break;
+            
+        case '三棱柱':
+            // 绘制三棱柱
+            drawTriangularPrism(ctx, centerX, centerY);
+            break;
+    }
+}
+
+// 绘制长方体
+function drawCuboid(ctx, centerX, centerY) {
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+    ctx.strokeStyle = '#667eea';
+    
+    // 前面
+    ctx.beginPath();
+    ctx.rect(centerX - 70, centerY - 30, 100, 70);
+    ctx.fill();
+    ctx.stroke();
+    
+    // 侧面
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+    ctx.beginPath();
+    ctx.moveTo(centerX + 30, centerY - 30);
+    ctx.lineTo(centerX + 70, centerY - 55);
+    ctx.lineTo(centerX + 70, centerY + 15);
+    ctx.lineTo(centerX + 30, centerY + 40);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    // 顶面
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.25)';
+    ctx.beginPath();
+    ctx.moveTo(centerX - 70, centerY - 30);
+    ctx.lineTo(centerX - 30, centerY - 55);
+    ctx.lineTo(centerX + 70, centerY - 55);
+    ctx.lineTo(centerX + 30, centerY - 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+}
+
+// 绘制正方体
+function drawCube(ctx, centerX, centerY) {
+    const size = 60;
+    const offset = 30;
+    
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+    ctx.strokeStyle = '#667eea';
+    
+    // 前面
+    ctx.beginPath();
+    ctx.rect(centerX - size/2, centerY - size/2 + 10, size, size);
+    ctx.fill();
+    ctx.stroke();
+    
+    // 侧面
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+    ctx.beginPath();
+    ctx.moveTo(centerX + size/2, centerY - size/2 + 10);
+    ctx.lineTo(centerX + size/2 + offset, centerY - size/2 - offset + 10);
+    ctx.lineTo(centerX + size/2 + offset, centerY + size/2 - offset + 10);
+    ctx.lineTo(centerX + size/2, centerY + size/2 + 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    // 顶面
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.25)';
+    ctx.beginPath();
+    ctx.moveTo(centerX - size/2, centerY - size/2 + 10);
+    ctx.lineTo(centerX - size/2 + offset, centerY - size/2 - offset + 10);
+    ctx.lineTo(centerX + size/2 + offset, centerY - size/2 - offset + 10);
+    ctx.lineTo(centerX + size/2, centerY - size/2 + 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+}
+
+// 绘制圆柱
+function drawCylinder(ctx, centerX, centerY) {
+    const radiusX = 45;
+    const radiusY = 15;
+    const height = 90;
+    
+    // 底部椭圆
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+    ctx.strokeStyle = '#667eea';
+    ctx.lineWidth = 2;
+    
+    ctx.beginPath();
+    ctx.ellipse(centerX, centerY + height/2, radiusX, radiusY, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    
+    // 侧面矩形
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.25)';
+    ctx.fillRect(centerX - radiusX, centerY - height/2, radiusX * 2, height);
+    
+    // 侧面边线
+    ctx.beginPath();
+    ctx.moveTo(centerX - radiusX, centerY - height/2);
+    ctx.lineTo(centerX - radiusX, centerY + height/2);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(centerX + radiusX, centerY - height/2);
+    ctx.lineTo(centerX + radiusX, centerY + height/2);
+    ctx.stroke();
+    
+    // 顶部椭圆（在最上层）
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.5)';
+    ctx.beginPath();
+    ctx.ellipse(centerX, centerY - height/2, radiusX, radiusY, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+}
+
+// 绘制球
+function drawSphere(ctx, centerX, centerY) {
+    const radius = 65;
+    
+    // 外轮廓阴影
+    ctx.shadowColor = 'rgba(102, 126, 234, 0.3)';
+    ctx.shadowBlur = 15;
+    ctx.shadowOffsetX = 5;
+    ctx.shadowOffsetY = 5;
+    
+    // 创建径向渐变，模拟球体光照
+    const gradient = ctx.createRadialGradient(
+        centerX - 25, centerY - 25, 5,
+        centerX, centerY, radius
+    );
+    gradient.addColorStop(0, '#e8eeff');
+    gradient.addColorStop(0.4, 'rgba(150, 170, 255, 0.6)');
+    gradient.addColorStop(1, 'rgba(102, 126, 234, 0.4)');
+    
+    ctx.fillStyle = gradient;
+    
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // 重置阴影
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    
+    // 球体轮廓
+    ctx.strokeStyle = '#667eea';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    
+    // 添加高光点
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.beginPath();
+    ctx.arc(centerX - 20, centerY - 20, 12, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+// 绘制三棱柱
+function drawTriangularPrism(ctx, centerX, centerY) {
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+    ctx.strokeStyle = '#667eea';
+    ctx.lineWidth = 2;
+    
+    // 前面三角形
+    ctx.beginPath();
+    ctx.moveTo(centerX - 50, centerY + 40);
+    ctx.lineTo(centerX, centerY - 40);
+    ctx.lineTo(centerX + 50, centerY + 40);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    // 侧面
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+    ctx.beginPath();
+    ctx.moveTo(centerX + 50, centerY + 40);
+    ctx.lineTo(centerX + 90, centerY + 20);
+    ctx.lineTo(centerX + 40, centerY - 60);
+    ctx.lineTo(centerX, centerY - 40);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    
+    // 顶面
+    ctx.fillStyle = 'rgba(102, 126, 234, 0.25)';
+    ctx.beginPath();
+    ctx.moveTo(centerX - 50, centerY + 40);
+    ctx.lineTo(centerX, centerY - 40);
+    ctx.lineTo(centerX + 40, centerY - 60);
+    ctx.lineTo(centerX - 10, centerY + 20);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
 }

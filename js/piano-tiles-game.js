@@ -4,7 +4,8 @@ let pianoGameState = {
     difficulty: 1,
     score: 0,
     lives: 3,
-    speed: 0.5, // 初始下落速度 0.5像素/帧
+    speed: 0.8, // 初始下落速度 0.8像素/帧
+    customSpeed: 0.8, // 用户自定义速度
     tiles: [],
     gameActive: false,
     gameInterval: null,
@@ -19,6 +20,11 @@ let pianoGameState = {
     maxSimultaneousTiles: 5, // 最大同时下落数量
     endlessCorrectCount: 0 // 无尽模式累计正确点击数
 };
+
+// 更新速度显示
+function updatePianoSpeedDisplay(value) {
+    document.getElementById('piano-speed-value').textContent = parseFloat(value).toFixed(1);
+}
 
 const PIANO_CONFIG = {
     1: { range: 20, initialSpawn: 2500, minSpawn: 1500, speedIncrement: 0.05, name: '难度一', icon: '🐝', type: 'add-sub' },
@@ -53,11 +59,15 @@ function selectPianoDifficulty(difficulty) {
     pianoGameState.difficulty = difficulty;
     const config = PIANO_CONFIG[difficulty];
     
+    // 获取用户选择的速度
+    const speedSlider = document.getElementById('piano-speed-slider');
+    pianoGameState.customSpeed = parseFloat(speedSlider.value);
+    
     // 初始化游戏状态
     pianoGameState.score = 0;
     pianoGameState.lives = 3;
-    // 难度1-3固定速度0.8，难度4（无尽模式）从0.5开始递增
-    pianoGameState.speed = config.endless ? 0.5 : 0.8;
+    // 无尽模式（难度4）固定速度0.6，其他难度使用用户自定义速度
+    pianoGameState.speed = config.endless ? 0.6 : pianoGameState.customSpeed;
     pianoGameState.tiles = [];
     pianoGameState.gameActive = true;
     pianoGameState.spawnDelay = config.initialSpawn;
@@ -143,8 +153,8 @@ function spawnPianoTile() {
     let column;
     let attempts = 0;
     const maxAttempts = 30; // 最多尝试30次
-    const tileHeight = 100; // 钢琴块高度
-    const minSafeDistance = 150; // 最小安全距离（钢琴块高度 + 50px间隔）
+    const tileHeight = 350; // 钢琴块高度（350px）
+    const minSafeDistance = 400; // 最小安全距离（钢琴块高度 + 50px间隔）
     
     do {
         column = Math.floor(Math.random() * 5);
@@ -396,8 +406,8 @@ function updatePianoGame() {
         tile.y += pianoGameState.speed;
         tile.element.style.top = `${tile.y}px`;
         
-        // 检查是否掉落到底部（根据新高度100px调整）
-        if (tile.y > containerHeight - 100) {
+        // 检查是否掉落到底部（根据高度350px调整）
+        if (tile.y > containerHeight - 350) {
             // 如果是正确的钢琴块掉落，扣除生命值
             if (tile.isCorrect) {
                 pianoGameState.lives--;

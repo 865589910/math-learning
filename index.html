@@ -272,6 +272,7 @@
             <div id="difficulty-selection" class="difficulty-screen">
                 <h2 class="game-modal-title">🎴 扑克牌抽卡游戏</h2>
                 <p class="game-modal-subtitle">选择你的挑战难度</p>
+                <button class="game-rules-btn" onclick="showCardGameRules()">📖 游戏规则</button>
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" onclick="startGame(1)">
@@ -384,6 +385,7 @@
             <div id="sudoku-difficulty-selection" class="difficulty-screen">
                 <h2 class="game-modal-title">🧩 数独游戏</h2>
                 <p class="game-modal-subtitle">选择你的挑战难度</p>
+                <button class="game-rules-btn" onclick="showSudokuGameRules()">📖 游戏规则</button>
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" onclick="startSudoku(3)">
@@ -468,6 +470,7 @@
             <div id="guess-number-difficulty-screen" class="difficulty-screen">
                 <h2 class="game-modal-title">💣 数字炸弹游戏 💣</h2>
                 <p class="game-modal-subtitle">选择你的挑战难度</p>
+                <button class="game-rules-btn" onclick="showGuessGameRules()">📖 游戏规则</button>
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" onclick="selectGuessNumberDifficulty(1)">
@@ -551,6 +554,7 @@
             <div id="match-difficulty-screen" class="difficulty-screen">
                 <h2 class="game-modal-title">🎮 数学消消乐 🎮</h2>
                 <p class="game-modal-subtitle">选择你的挑战难度</p>
+                <button class="game-rules-btn" onclick="showMatchGameRules()">📖 游戏规则</button>
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" onclick="selectMatchDifficulty(0)">
@@ -673,6 +677,25 @@
             <div id="math-wall-difficulty-screen" class="difficulty-screen">
                 <h2 class="game-modal-title">🧱 数学墙来了 🧱</h2>
                 <p class="game-modal-subtitle">选择你的挑战难度</p>
+                <button class="game-rules-btn" onclick="showMathWallGameRules()">📖 游戏规则</button>
+                
+                <!-- 速度调节器 -->
+                <div class="speed-control-section">
+                    <h3 class="speed-control-title">⚡ 调整墙下落速度</h3>
+                    <div class="speed-control-container">
+                        <div class="speed-labels">
+                            <span class="speed-label">🐌 慢速</span>
+                            <span class="speed-label">🐇 正常</span>
+                            <span class="speed-label">🐆 快速</span>
+                        </div>
+                        <input type="range" id="wall-speed-slider" class="speed-slider" 
+                               min="0.5" max="2.0" step="0.1" value="1.0" 
+                               oninput="updateWallSpeedDisplay(this.value)">
+                        <div class="speed-display">
+                            当前速度：<span id="wall-speed-value">1.0</span>x
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" onclick="selectMathWallDifficulty(1)">
@@ -779,7 +802,7 @@
                 </div>
                 
                 <div class="math-wall-controls">
-                    <p class="control-hint">💡 电脑：使用键盘 ← → 或 A D 键 | 手机：点击下方左右按钮</p>
+                    <p class="control-hint">💡 点击墙块 | 键盘←→/AD键 | 左右按钮，任选其一控制小熊</p>
                 </div>
                 
                 <div id="math-wall-result" class="game-result" style="display: none;"></div>
@@ -801,6 +824,25 @@
             <div id="piano-difficulty-screen" class="difficulty-screen">
                 <h2 class="game-modal-title">🎹 数学钢琴块 🎹</h2>
                 <p class="game-modal-subtitle">选择你的挑战难度</p>
+                <button class="game-rules-btn" onclick="showPianoGameRules()">📖 游戏规则</button>
+                
+                <!-- 速度调节器 -->
+                <div class="speed-control-section">
+                    <h3 class="speed-control-title">⚡ 调整下落速度</h3>
+                    <div class="speed-control-container">
+                        <div class="speed-labels">
+                            <span class="speed-label">🐌 慢速</span>
+                            <span class="speed-label">🐇 正常</span>
+                            <span class="speed-label">🐆 快速</span>
+                        </div>
+                        <input type="range" id="piano-speed-slider" class="speed-slider" 
+                               min="0.5" max="2.0" step="0.1" value="0.8" 
+                               oninput="updatePianoSpeedDisplay(this.value)">
+                        <div class="speed-display">
+                            当前速度：<span id="piano-speed-value">0.8</span>x
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" onclick="selectPianoDifficulty(1)">
@@ -899,6 +941,7 @@
             <div id="shopping-difficulty-screen" class="difficulty-screen">
                 <h2 class="game-modal-title">🛍️ 购物小达人 🛍️</h2>
                 <p class="game-modal-subtitle">扮演顾客和售货员，学习购物、计算和找零</p>
+                <button class="game-rules-btn" onclick="showShoppingGameRules()">📖 游戏规则</button>
                 
                 <div class="difficulty-options">
                     <div class="difficulty-card" onclick="selectShoppingDifficulty(1)">
@@ -967,6 +1010,7 @@
 
     <script src="data/data.js"></script>
     <script src="js/audio-player.js"></script>
+    <script src="js/game-rules.js"></script>
     <script src="js/card-game.js"></script>
     <script src="js/sudoku-game.js"></script>
     <script src="js/guess-number-game.js"></script>

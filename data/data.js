@@ -45,7 +45,7 @@ const learningData = {
             { word: '计算', pinyin: 'jì suàn', explanation: '根据算式求出答案。', type: 'phrase' }
         ],
         positions: [
-            { word: '行', pinyin: 'háng', explanation: '横排叫做行，从左到右的一排。', type: 'single' },
+            { word: '行', pinyin: 'háng', explanation: '横排叫做行（háng），从左到右的一排。注意：行是多音字，表示“行列”时读háng，表示“行走”时读xíng。', type: 'single' },
             { word: '列', pinyin: 'liè', explanation: '竖排叫做列，从上到下的一排。', type: 'single' },
             { word: '排', pinyin: 'pái', explanation: '按顺序站成一行或多行。', type: 'single' },
             { word: '上', pinyin: 'shàng', explanation: '位置在高处，跟"下"相对。', type: 'single' },
@@ -392,7 +392,7 @@ const learningData = {
             { word: '平行四边形', pinyin: 'píng xíng sì biān xíng', explanation: '有四条边，对边平行且相等的图形。', type: 'phrase' }
         ],
         solidShapes: [
-            { word: '长方体', pinyin: 'cháng fāng tǐ', explanation: '像砖头、盒子一样的立体图形。', type: 'phrase' },
+            { word: '长方体', pinyin: 'cháng fāng tǐ', explanation: '有六个面，相对两面一个样。', type: 'phrase' },
             { word: '正方体', pinyin: 'zhèng fāng tǐ', explanation: '像骰子一样，六个面都是正方形的立体图形。', type: 'phrase' },
             { word: '圆柱', pinyin: 'yuán zhù', explanation: '像柱子一样，上下两个面是圆形的立体图形。', type: 'phrase' },
             { word: '球', pinyin: 'qiú', explanation: '圆圆的，可以滚动的立体图形，像皮球。', type: 'single' },
@@ -403,32 +403,368 @@ const learningData = {
     // 三、基础知识点
     section3: {
         fillMethods: [
-            { word: '加数+加数=和', pinyin: 'jiā shù jiā jiā shù děng yú hé', explanation: '加法算式：两个加数相加等于和。', type: 'sentence' },
-            { word: '和-加数=加数', pinyin: 'hé jiǎn jiā shù děng yú jiā shù', explanation: '用和减去一个加数，就能得到另一个加数。', type: 'sentence' },
-            { word: '被减数-减数=差', pinyin: 'bèi jiǎn shù jiǎn jiǎn shù děng yú chā', explanation: '减法算式：被减数减去减数等于差。', type: 'sentence' },
-            { word: '被减数-差=减数', pinyin: 'bèi jiǎn shù jiǎn chā děng yú jiǎn shù', explanation: '用被减数减去差，就能得到减数。', type: 'sentence' },
-            { word: '减数+差=被减数', pinyin: 'jiǎn shù jiā chā děng yú bèi jiǎn shù', explanation: '减数加上差，就能得到被减数。', type: 'sentence' },
-            { word: '乘数×乘数=积', pinyin: 'chéng shù chéng chéng shù děng yú jī', explanation: '乘法算式：两个乘数相乘等于积。', type: 'sentence' },
-            { word: '积÷乘数=乘数', pinyin: 'jī chú chéng shù děng yú chéng shù', explanation: '用积除以一个乘数，就能得到另一个乘数。', type: 'sentence' },
-            { word: '被除数÷除数=商', pinyin: 'bèi chú shù chú chú shù děng yú shāng', explanation: '除法算式：被除数除以除数等于商。', type: 'sentence' },
-            { word: '被除数÷商=除数', pinyin: 'bèi chú shù chú shāng děng yú chú shù', explanation: '用被除数除以商，就能得到除数。', type: 'sentence' },
-            { word: '除数×商=被除数', pinyin: 'chú shù chéng shāng děng yú bèi chú shù', explanation: '除数乘以商，就能得到被除数。', type: 'sentence' }
+            { 
+                word: '加数+加数=和', 
+                pinyin: 'jiā shù jiā jiā shù děng yú hé', 
+                explanation: '加法算式：两个加数相加等于和。',
+                examples: [
+                    {
+                        question: '8 + 7 = ⚪，求⚪',
+                        analysis: '这是一个基本的加法运算，两个加数是8和7，直接相加即可得到和。',
+                        formula: '8 + 7 = 15',
+                        answer: '⚪ = 15'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '和-加数=加数', 
+                pinyin: 'hé jiǎn jiā shù děng yú jiā shù', 
+                explanation: '用和减去一个加数，就能得到另一个加数。',
+                examples: [
+                    {
+                        question: '8 + ⚪ = 16，求⚪',
+                        analysis: '已知和是16，一个加数是8，求另一个加数。用和减去已知的加数。',
+                        formula: '16 - 8 = 8',
+                        answer: '⚪ = 8'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '被减数-减数=差', 
+                pinyin: 'bèi jiǎn shù jiǎn jiǎn shù děng yú chā', 
+                explanation: '减法算式：被减数减去减数等于差。',
+                examples: [
+                    {
+                        question: '15 - 6 = ⚪，求⚪',
+                        analysis: '这是一个基本的减法运算，被减数是15，减数是6，直接相减即可得到差。',
+                        formula: '15 - 6 = 9',
+                        answer: '⚪ = 9'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '被减数-差=减数', 
+                pinyin: 'bèi jiǎn shù jiǎn chā děng yú jiǎn shù', 
+                explanation: '用被减数减去差，就能得到减数。',
+                examples: [
+                    {
+                        question: '15 - ⚪ = 9，求⚪',
+                        analysis: '已知被减数是15，差是9，求减数。用被减数减去差。',
+                        formula: '15 - 9 = 6',
+                        answer: '⚪ = 6'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '减数+差=被减数', 
+                pinyin: 'jiǎn shù jiā chā děng yú bèi jiǎn shù', 
+                explanation: '减数加上差，就能得到被减数。',
+                examples: [
+                    {
+                        question: '⚪ - 6 = 9，求⚪',
+                        analysis: '已知减数是6，差是9，求被减数。用减数加上差。',
+                        formula: '6 + 9 = 15',
+                        answer: '⚪ = 15'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '乘数×乘数=积', 
+                pinyin: 'chéng shù chéng chéng shù děng yú jī', 
+                explanation: '乘法算式：两个乘数相乘等于积。',
+                examples: [
+                    {
+                        question: '6 × 7 = ⚪，求⚪',
+                        analysis: '这是一个基本的乘法运算，两个乘数是6和7，直接相乘即可得到积。',
+                        formula: '6 × 7 = 42',
+                        answer: '⚪ = 42'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '积÷乘数=乘数', 
+                pinyin: 'jī chú chéng shù děng yú chéng shù', 
+                explanation: '用积除以一个乘数，就能得到另一个乘数。',
+                examples: [
+                    {
+                        question: '6 × ⚪ = 42，求⚪',
+                        analysis: '已知积是42，一个乘数是6，求另一个乘数。用积除以已知的乘数。',
+                        formula: '42 ÷ 6 = 7',
+                        answer: '⚪ = 7'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '被除数÷除数=商', 
+                pinyin: 'bèi chú shù chú chú shù děng yú shāng', 
+                explanation: '除法算式：被除数除以除数等于商。',
+                examples: [
+                    {
+                        question: '24 ÷ 6 = ⚪，求⚪',
+                        analysis: '这是一个基本的除法运算，被除数是24，除数是6，直接相除即可得到商。',
+                        formula: '24 ÷ 6 = 4',
+                        answer: '⚪ = 4'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '被除数÷商=除数', 
+                pinyin: 'bèi chú shù chú shāng děng yú chú shù', 
+                explanation: '用被除数除以商，就能得到除数。',
+                examples: [
+                    {
+                        question: '24 ÷ ⚪ = 4，求⚪',
+                        analysis: '已知被除数是24，商是4，求除数。用被除数除以商。',
+                        formula: '24 ÷ 4 = 6',
+                        answer: '⚪ = 6'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '除数×商=被除数', 
+                pinyin: 'chú shù chéng shāng děng yú bèi chú shù', 
+                explanation: '除数乘以商，就能得到被除数。',
+                examples: [
+                    {
+                        question: '⚪ ÷ 6 = 4，求⚪',
+                        analysis: '已知除数是6，商是4，求被除数。用除数乘以商。',
+                        formula: '6 × 4 = 24',
+                        answer: '⚪ = 24'
+                    }
+                ],
+                type: 'sentence' 
+            }
         ],
         comparisonRules: [
-            { word: '加数变大和变大', pinyin: 'jiā shù biàn dà hé biàn dà', explanation: '加法运算中，一个加数变大，另一个加数不变，和也会变大。', type: 'sentence' },
-            { word: '加数变小和变小', pinyin: 'jiā shù biàn xiǎo hé biàn xiǎo', explanation: '加法运算中，一个加数减小，另一个加数不变，和也会变小。', type: 'sentence' },
-            { word: '加数一增一减和不变', pinyin: 'jiā shù yī zēng yī jiǎn hé bù biàn', explanation: '加法运算中，一个加数减几，另一个加数加回同样的数，和不变。', type: 'sentence' },
-            { word: '被减数变大差变大', pinyin: 'bèi jiǎn shù biàn dà chā biàn dà', explanation: '减法运算中，被减数变大，减数不变，差也会变大。', type: 'sentence' },
-            { word: '减数变大差变小', pinyin: 'jiǎn shù biàn dà chā biàn xiǎo', explanation: '减法运算中，被减数不变，减数变大，差会变小。', type: 'sentence' },
-            { word: '被减数减数同增减差不变', pinyin: 'bèi jiǎn shù jiǎn shù tóng zēng jiǎn chā bù biàn', explanation: '减法运算中，被减数和减数同时加几或者减几，差不变。', type: 'sentence' },
-            { word: '乘数变大积变大', pinyin: 'chéng shù biàn dà jī biàn dà', explanation: '乘法运算中，一个乘数变大，另一个乘数不变，积也会变大。', type: 'sentence' },
-            { word: '乘数变小积变小', pinyin: 'chéng shù biàn xiǎo jī biàn xiǎo', explanation: '乘法运算中，一个乘数减小，另一个乘数不变，积也会变小。', type: 'sentence' }
+            { 
+                word: '加数变大和变大', 
+                pinyin: 'jiā shù biàn dà hé biàn dà', 
+                explanation: '加法运算中，一个加数变大，另一个加数不变，和也会变大。',
+                examples: [
+                    {
+                        question: '8 + 6 ⭕ 5 + 6，在⭕里填大于号或小于号',
+                        analysis: '一个加数6不变，另一个加数8比5大，所以和变大，前面更大。',
+                        formula: '8 + 6 = 14，5 + 6 = 11，14 > 11',
+                        answer: '填大于号：8 + 6 > 5 + 6'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '加数变小和变小', 
+                pinyin: 'jiā shù biàn xiǎo hé biàn xiǎo', 
+                explanation: '加法运算中，一个加数减小，另一个加数不变，和也会变小。',
+                examples: [
+                    {
+                        question: '8 + 6 ⭕ 5 + 6，在⭕里填大于号或小于号',
+                        analysis: '一个加数6不变，另一个加数8变小成5，所以和变小，前面更大。',
+                        formula: '8 + 6 = 14，5 + 6 = 11，14 > 11',
+                        answer: '填大于号：8 + 6 > 5 + 6'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '加数一增一减和不变', 
+                pinyin: 'jiā shù yī zēng yī jiǎn hé bù biàn', 
+                explanation: '加法运算中，一个加数减几，另一个加数加回同样的数，和不变。',
+                examples: [
+                    {
+                        question: '8 + 7 ⭕ 6 + 9，在⭕里填大于号、小于号或等号',
+                        analysis: '8减2变成6，7加2变成9，一个减2，另一个加2，所以和不变。',
+                        formula: '8 + 7 = 15，6 + 9 = 15，15 = 15',
+                        answer: '填等号：8 + 7 = 6 + 9'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '被减数变大差变大', 
+                pinyin: 'bèi jiǎn shù biàn dà chā biàn dà', 
+                explanation: '减法运算中，被减数变大，减数不变，差也会变大。',
+                examples: [
+                    {
+                        question: '10 - 4 ⭕ 8 - 4，在⭕里填大于号或小于号',
+                        analysis: '减数4不变，被减数10比8大，所以差变大，前面更大。',
+                        formula: '10 - 4 = 6，8 - 4 = 4，6 > 4',
+                        answer: '填大于号：10 - 4 > 8 - 4'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '减数变大差变小', 
+                pinyin: 'jiǎn shù biàn dà chā biàn xiǎo', 
+                explanation: '减法运算中，被减数不变，减数变大，差会变小。',
+                examples: [
+                    {
+                        question: '12 - 5 ⭕ 12 - 7，在⭕里填大于号或小于号',
+                        analysis: '被减数12不变，减数5变大成7，所以差变小，后面更小。',
+                        formula: '12 - 5 = 7，12 - 7 = 5，7 > 5',
+                        answer: '填大于号：12 - 5 > 12 - 7'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '被减数减数同增减差不变', 
+                pinyin: 'bèi jiǎn shù jiǎn shù tóng zēng jiǎn chā bù biàn', 
+                explanation: '减法运算中，被减数和减数同时加几或者减几，差不变。',
+                examples: [
+                    {
+                        question: '10 - 6 ⭕ 12 - 8，在⭕里填大于号、小于号或等号',
+                        analysis: '10加2变成12，6也加2变成8，被减数和减数同时加2，所以差不变。',
+                        formula: '10 - 6 = 4，12 - 8 = 4，4 = 4',
+                        answer: '填等号：10 - 6 = 12 - 8'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '乘数变大积变大', 
+                pinyin: 'chéng shù biàn dà jī biàn dà', 
+                explanation: '乘法运算中，一个乘数变大，另一个乘数不变，积也会变大。',
+                examples: [
+                    {
+                        question: '6 × 5 ⭕ 6 × 3，在⭕里填大于号或小于号',
+                        analysis: '一个乘数6不变，另一个乘数5比3大，所以积变大，前面更大。',
+                        formula: '6 × 5 = 30，6 × 3 = 18，30 > 18',
+                        answer: '填大于号：6 × 5 > 6 × 3'
+                    }
+                ],
+                type: 'sentence' 
+            },
+            { 
+                word: '乘数变小积变小', 
+                pinyin: 'chéng shù biàn xiǎo jī biàn xiǎo', 
+                explanation: '乘法运算中，一个乘数减小，另一个乘数不变，积也会变小。',
+                examples: [
+                    {
+                        question: '4 × 7 ⭕ 4 × 9，在⭕里填大于号或小于号',
+                        analysis: '一个乘数4不变，另一个乘数7比9小，所以积变小，后面更小。',
+                        formula: '4 × 7 = 28，4 × 9 = 36，28 < 36',
+                        answer: '填小于号：4 × 7 < 4 × 9'
+                    }
+                ],
+                type: 'sentence' 
+            }
         ],
         hundredTable: [
-            { word: '往上减10', pinyin: 'wǎng shàng jiǎn shí', explanation: '在百数表中，往上一格减10。', type: 'phrase' },
-            { word: '往下加10', pinyin: 'wǎng xià jiā shí', explanation: '在百数表中，往下一格加10。', type: 'phrase' },
-            { word: '往左减1', pinyin: 'wǎng zuǒ jiǎn yī', explanation: '在百数表中，往左一格减1。', type: 'phrase' },
-            { word: '往右加1', pinyin: 'wǎng yòu jiā yī', explanation: '在百数表中，往右一格加1。', type: 'phrase' }
+            { 
+                word: '往上减10', 
+                pinyin: 'wǎng shàng jiǎn shí', 
+                explanation: '在百数表中，往上一格减10。',
+                examples: [
+                    {
+                        question: '在百数表中，从45往上移动一格到达的数是⭕，求⭕',
+                        analysis: '在百数表中，往上移动一格，数字会减少10。从45往上移动一格。',
+                        formula: '45 - 10 = 35',
+                        answer: '⭕ = 35'
+                    }
+                ],
+                type: 'phrase' 
+            },
+            { 
+                word: '往下加10', 
+                pinyin: 'wǎng xià jiā shí', 
+                explanation: '在百数表中，往下一格加10。',
+                examples: [
+                    {
+                        question: '在百数表中，从28往下移动一格到达的数是⭕，求⭕',
+                        analysis: '在百数表中，往下移动一格，数字会增加10。从28往下移动一格。',
+                        formula: '28 + 10 = 38',
+                        answer: '⭕ = 38'
+                    }
+                ],
+                type: 'phrase' 
+            },
+            { 
+                word: '往左减1', 
+                pinyin: 'wǎng zuǒ jiǎn yī', 
+                explanation: '在百数表中，往左一格减1。',
+                examples: [
+                    {
+                        question: '在百数表中，从56往左移动一格到达的数是⭕，求⭕',
+                        analysis: '在百数表中，往左移动一格，数字会减少1。从56往左移动一格。',
+                        formula: '56 - 1 = 55',
+                        answer: '⭕ = 55'
+                    }
+                ],
+                type: 'phrase' 
+            },
+            { 
+                word: '往右加1', 
+                pinyin: 'wǎng yòu jiā yī', 
+                explanation: '在百数表中，往右一格加1。',
+                examples: [
+                    {
+                        question: '在百数表中，从72往右移动一格到达的数是⭕，求⭕',
+                        analysis: '在百数表中，往右移动一格，数字会增加1。从72往右移动一格。',
+                        formula: '72 + 1 = 73',
+                        answer: '⭕ = 73'
+                    }
+                ],
+                type: 'phrase' 
+            },
+            { 
+                word: '百数表3×3练习', 
+                pinyin: 'bǎi shù biǎo sān chéng sān liàn xí', 
+                explanation: '给出中心数字，根据百数表规律求周围全8个数字。规律：往上减10，往下加10，往左减1，往右加1。',
+                examples: [
+                    {
+                        question: '填写下面百数表3×3表格，中心是45，求周围的数',
+                        analysis: '从中心数45开始：<br>左上：45-10-1=34；上方：45-10=35；右上：45-10+1=36<br>左侧：45-1=44；中心：45；右侧：45+1=46<br>左下：45+10-1=54；下方：45+10=55；右下：45+10+1=56',
+                        formula: '',
+                        answer: '',
+                        gridData: {
+                            center: 45,
+                            grid: [
+                                [34, 35, 36],
+                                [44, 45, 46],
+                                [54, 55, 56]
+                            ]
+                        }
+                    },
+                    {
+                        question: '填写下面百数表3×3表格，中心是28，求周围的数',
+                        analysis: '从中心数28开始：<br>左上：28-10-1=17；上方：28-10=18；右上：28-10+1=19<br>左侧：28-1=27；中心：28；右侧：28+1=29<br>左下：28+10-1=37；下方：28+10=38；右下：28+10+1=39',
+                        formula: '',
+                        answer: '',
+                        gridData: {
+                            center: 28,
+                            grid: [
+                                [17, 18, 19],
+                                [27, 28, 29],
+                                [37, 38, 39]
+                            ]
+                        }
+                    },
+                    {
+                        question: '填写下面百数表3×3表格，中心是63，求周围的数',
+                        analysis: '从中心数63开始：<br>左上：63-10-1=52；上方：63-10=53；右上：63-10+1=54<br>左侧：63-1=62；中心：63；右侧：63+1=64<br>左下：63+10-1=72；下方：63+10=73；右下：63+10+1=74',
+                        formula: '',
+                        answer: '',
+                        gridData: {
+                            center: 63,
+                            grid: [
+                                [52, 53, 54],
+                                [62, 63, 64],
+                                [72, 73, 74]
+                            ]
+                        }
+                    }
+                ],
+                type: 'sentence' 
+            }
         ]
     },
 
