@@ -4980,12 +4980,24 @@ footer {
     }
     
     .klotski-grid-5x5 {
-        max-width: 420px;
+        max-width: 450px;
     }
     
     .klotski-tile {
         font-size: 1.4em;
         min-width: 60px;
+    }
+    
+    .klotski-grid-3x3 .klotski-tile {
+        min-width: 100px;
+    }
+    
+    .klotski-grid-4x4 .klotski-tile {
+        min-width: 85px;
+    }
+    
+    .klotski-grid-5x5 .klotski-tile {
+        min-width: 70px;
     }
     
     .klotski-tile-number {
@@ -5003,8 +5015,8 @@ footer {
 
 @media (max-width: 480px) {
     .klotski-grid {
-        gap: 6px;
-        padding: 15px;
+        gap: 5px;
+        padding: 12px;
     }
     
     .klotski-grid-3x3 {
@@ -5012,26 +5024,37 @@ footer {
     }
     
     .klotski-grid-4x4 {
-        max-width: 340px;
+        max-width: 320px;
     }
     
     .klotski-grid-5x5 {
-        max-width: 360px;
+        max-width: 340px;
     }
     
     .klotski-tile {
-        font-size: 1.2em;
+        font-size: 1em;
+        border-radius: 8px;
+    }
+    
+    .klotski-grid-3x3 .klotski-tile {
+        min-width: 90px;
+    }
+    
+    .klotski-grid-4x4 .klotski-tile {
+        min-width: 70px;
+    }
+    
+    .klotski-grid-5x5 .klotski-tile {
         min-width: 55px;
-        border-radius: 10px;
     }
     
     .klotski-tile-number {
-        font-size: 1em;
-        margin-bottom: 3px;
+        font-size: 0.95em;
+        margin-bottom: 2px;
     }
     
     .klotski-tile-icon {
-        font-size: 1.4em;
+        font-size: 1.3em;
     }
     
     .klotski-stats {
