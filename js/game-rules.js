@@ -237,6 +237,48 @@ const gameRules = {
                 <p>全部正确会显示通关信息和用时，挑战自己的最快记录吧！</p>
             </div>
         `
+    },
+    
+    klotskiGame: {
+        title: "🧩 数字华容道规则",
+        content: `
+            <div class="rules-content">
+                <h3>🎯 游戏目标</h3>
+                <p>通过滑动数字方块，将所有数字按从小到大的顺序排列，空格在右下角。</p>
+                
+                <h3>📖 基本规则</h3>
+                <ul>
+                    <li>🔢 方块上显示数字和可爱的动物贴纸</li>
+                    <li>👆 只能点击与空格相邻的方块进行移动</li>
+                    <li>🎯 目标是从左到右、从上到下排列成1、2、3...</li>
+                    <li>⏱️ 游戏会记录你的用时和步数</li>
+                    <li>🏆 挑战最少步数和最短时间！</li>
+                </ul>
+                
+                <h3>🎮 怎么玩</h3>
+                <ol>
+                    <li>选择难度（3×3简单、4×4中等、5×5困难）</li>
+                    <li>点击与空格相邻的方块，方块会滑动到空格位置</li>
+                    <li>逐步移动方块，将所有数字排列正确</li>
+                    <li>完成后会显示用时和步数</li>
+                    <li>尝试打破自己的最佳记录！</li>
+                </ol>
+                
+                <h3>💡 解题技巧</h3>
+                <ul>
+                    <li><strong>先完成第一行</strong>：从左到右依次放置1、2、3...</li>
+                    <li><strong>再完成第一列</strong>：从上到下继续排列</li>
+                    <li><strong>逐步缩小</strong>：将大问题分解成小问题</li>
+                    <li><strong>最后3×2区域</strong>：需要特殊技巧，可以点击"提示"查看</li>
+                    <li><strong>耐心尝试</strong>：多练习就能找到窍门！</li>
+                </ul>
+                
+                <h3>🏆 挑战目标</h3>
+                <p><strong>3×3：</strong>尝试在30步内、1分钟内完成</p>
+                <p><strong>4×4：</strong>尝试在80步内、3分钟内完成</p>
+                <p><strong>5×5：</strong>尝试在150步内、5分钟内完成</p>
+            </div>
+        `
     }
 };
 
@@ -306,4 +348,8 @@ function showShoppingGameRules() {
 
 function showSudokuGameRules() {
     showGameRules('sudokuGame');
+}
+
+function showKlotskiGameRules() {
+    showGameRules('klotskiGame');
 }

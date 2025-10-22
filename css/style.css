@@ -4836,3 +4836,210 @@ footer {
         font-size: 0.95em;
     }
 }
+
+/* 华容道游戏样式 */
+.klotski-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.klotski-stat {
+    text-align: center;
+}
+
+.klotski-stat-label {
+    font-size: 1em;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.klotski-stat-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.klotski-best-records {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 15px;
+    background: #fff3cd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px dashed #ffc107;
+    flex-wrap: wrap;
+}
+
+.klotski-best-record {
+    font-size: 0.95em;
+    color: #856404;
+    font-weight: 600;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+}
+
+.klotski-best-record span:last-child {
+    color: #ff6b6b;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.klotski-grid {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    margin: 0 auto 20px;
+    width: fit-content;
+    max-width: 95%;
+}
+
+.klotski-grid-3x3 {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 400px;
+}
+
+.klotski-grid-4x4 {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 500px;
+}
+
+.klotski-grid-5x5 {
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 600px;
+}
+
+.klotski-tile {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.8em;
+    font-weight: bold;
+    transition: all 0.3s;
+    min-width: 60px;
+}
+
+.klotski-tile.klotski-empty {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.klotski-tile.klotski-number {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.klotski-tile.klotski-number:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.klotski-tile.klotski-number:active {
+    transform: scale(0.95);
+}
+
+.klotski-tile-number {
+    font-size: 1.5em;
+    color: #667eea;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.klotski-tile-icon {
+    font-size: 2em;
+    line-height: 1;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+    .klotski-grid-3x3 {
+        max-width: 300px;
+    }
+    
+    .klotski-grid-4x4 {
+        max-width: 350px;
+    }
+    
+    .klotski-grid-5x5 {
+        max-width: 380px;
+    }
+    
+    .klotski-tile {
+        font-size: 1.2em;
+        min-width: 50px;
+    }
+    
+    .klotski-tile-number {
+        font-size: 1em;
+    }
+    
+    .klotski-tile-icon {
+        font-size: 1.5em;
+    }
+    
+    .klotski-stat-value {
+        font-size: 1.4em;
+    }
+}
+
+@media (max-width: 480px) {
+    .klotski-grid {
+        gap: 5px;
+        padding: 15px;
+    }
+    
+    .klotski-grid-3x3 {
+        max-width: 260px;
+    }
+    
+    .klotski-grid-4x4 {
+        max-width: 300px;
+    }
+    
+    .klotski-grid-5x5 {
+        max-width: 320px;
+    }
+    
+    .klotski-tile {
+        font-size: 1em;
+        min-width: 40px;
+        border-radius: 8px;
+    }
+    
+    .klotski-tile-number {
+        font-size: 0.9em;
+        margin-bottom: 2px;
+    }
+    
+    .klotski-tile-icon {
+        font-size: 1.2em;
+    }
+    
+    .klotski-stats {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .klotski-best-records {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .klotski-best-record {
+        font-size: 0.9em;
+    }
+}

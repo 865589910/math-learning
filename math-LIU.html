@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小学数学学习助手 - 二年级识字练习</title>
+    <title>锦龙小学数学学习助手 - 二年级数学学习</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎓 小学数学学习助手</h1>
-            <p class="subtitle">二年级数学关键字词学习与练习</p>
+            <h1>🎓 锦龙小学二年级数学学习助手</h1>
+            <p class="subtitle">数学关键字词学习与游戏练习</p>
         </header>
 
         <!-- 顶部选项卡导航 -->
@@ -214,11 +214,19 @@
                         <button class="game-btn">🎮 开始游戏</button>
                     </div>
                 </div>
+                <div class="game-container">
+                    <div class="game-card" onclick="openKlotskiGame()">
+                        <div class="game-icon">🧩</div>
+                        <h3 class="game-title">数字华容道</h3>
+                        <p class="game-desc">滑动数字方块，按顺序排列，锻炼逻辑思维！</p>
+                        <button class="game-btn">🎮 开始游戏</button>
+                    </div>
+                </div>
             </section>
         </main>
 
         <footer>
-            <p>© 2025 小学数学学习助手 | 为二年级学生精心设计</p>
+            <p>© 2025 锦龙小学数学学习助手 </p>
         </footer>
     </div>
 
@@ -1008,17 +1016,112 @@
         </div>
     </div>
 
+    <!-- 数字华容道游戏模态框 -->
+    <div id="klotski-modal" class="modal">
+        <div class="modal-content game-modal-content">
+            <span class="close-btn" onclick="closeKlotskiGame()">&times;</span>
+            
+            <!-- 难度选择界面 -->
+            <div id="klotski-difficulty-screen" class="difficulty-screen">
+                <h2 class="game-modal-title">🧩 数字华容道 🧩</h2>
+                <p class="game-modal-subtitle">选择你的挑战难度</p>
+                <button class="game-rules-btn" onclick="showKlotskiGameRules()">📖 游戏规则</button>
+                
+                <div class="difficulty-options">
+                    <div class="difficulty-card" onclick="selectKlotskiDifficulty(3)">
+                        <div class="difficulty-icon"><img src="images/1.png" alt="简单模式" class="difficulty-img"></div>
+                        <h3>简单模式</h3>
+                        <div class="difficulty-info">
+                            <p>🔢 网格：3×3</p>
+                            <p>🎯 难度：入门</p>
+                            <p>🏆 目标：30步内完成</p>
+                        </div>
+                        <button class="difficulty-btn">开始游戏</button>
+                    </div>
+                    
+                    <div class="difficulty-card" onclick="selectKlotskiDifficulty(4)">
+                        <div class="difficulty-icon"><img src="images/2.png" alt="中等模式" class="difficulty-img"></div>
+                        <h3>中等模式</h3>
+                        <div class="difficulty-info">
+                            <p>🔢 网格：4×4</p>
+                            <p>🎯 难度：进阶</p>
+                            <p>🏆 目标：80步内完成</p>
+                        </div>
+                        <button class="difficulty-btn">开始游戏</button>
+                    </div>
+                    
+                    <div class="difficulty-card" onclick="selectKlotskiDifficulty(5)">
+                        <div class="difficulty-icon"><img src="images/3.png" alt="困难模式" class="difficulty-img"></div>
+                        <h3>困难模式</h3>
+                        <div class="difficulty-info">
+                            <p>🔢 网格：5×5</p>
+                            <p>🎯 难度：高手</p>
+                            <p>🏆 目标：150步内完成</p>
+                        </div>
+                        <button class="difficulty-btn">开始游戏</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 游戏界面 -->
+            <div id="klotski-game-screen" class="game-screen" style="display: none;">
+                <div class="piano-game-header">
+                    <div class="piano-game-title">🧩 数字华容道</div>
+                    <div class="piano-difficulty-badge" id="klotski-difficulty-name">简单 (3×3)</div>
+                </div>
+                
+                <div class="klotski-stats">
+                    <div class="klotski-stat">
+                        <div class="klotski-stat-label">⏱️ 用时</div>
+                        <div class="klotski-stat-value" id="klotski-time">0:00</div>
+                    </div>
+                    <div class="klotski-stat">
+                        <div class="klotski-stat-label">👣 步数</div>
+                        <div class="klotski-stat-value" id="klotski-moves">0</div>
+                    </div>
+                </div>
+                
+                <div class="klotski-best-records">
+                    <div class="klotski-best-record">
+                        <span>🏆 最少步数：</span>
+                        <span id="klotski-best-moves">--</span>
+                    </div>
+                    <div class="klotski-best-record">
+                        <span>⏱️ 最快时间：</span>
+                        <span id="klotski-best-time">--</span>
+                    </div>
+                    <div class="klotski-best-record">
+                        <span>⚡ 最佳效率：</span>
+                        <span id="klotski-best-efficiency">--</span>
+                    </div>
+                </div>
+                
+                <div id="klotski-grid" class="klotski-grid">
+                    <!-- 方块将动态生成 -->
+                </div>
+                
+                <div id="klotski-result" class="game-result" style="display: none;"></div>
+                
+                <div class="control-buttons">
+                    <button class="game-control-btn" onclick="showKlotskiHint()">💡 提示</button>
+                    <button id="klotski-restart-btn" class="game-control-btn restart-btn" onclick="restartKlotskiGame()">🔄 重新开始</button>
+                    <button class="game-control-btn back-btn" onclick="backToKlotskiDifficulty()">🔙 返回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="data/data.js"></script>
     <script src="js/audio-player.js"></script>
     <script src="js/game-rules.js"></script>
     <script src="js/card-game.js"></script>
     <script src="js/sudoku-game.js"></script>
     <script src="js/guess-number-game.js"></script>
-
     <script src="js/match-game.js"></script>
     <script src="js/math-wall-game.js"></script>
     <script src="js/piano-tiles-game.js"></script>
     <script src="js/shopping-game.js"></script>
+    <script src="js/klotski-game.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
