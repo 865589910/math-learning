@@ -175,7 +175,20 @@ function renderGrid() {
                     <div class="klotski-tile-number">${value}</div>
                     <div class="klotski-tile-icon">${animalIcons[value - 1]}</div>
                 `;
+                // 添加点击和触摸事件
                 tile.onclick = () => moveTile(i, j);
+                tile.ontouchend = (e) => {
+                    e.preventDefault();
+                    moveTile(i, j);
+                };
+                // 添加视觉反馈
+                tile.ontouchstart = (e) => {
+                    e.preventDefault();
+                    tile.style.transform = 'scale(0.95)';
+                };
+                tile.ontouchcancel = () => {
+                    tile.style.transform = '';
+                };
             }
             
             container.appendChild(tile);
@@ -208,6 +221,14 @@ function moveTile(row, col) {
     // 更新UI
     renderGrid();
     updateKlotskiUI();
+    
+    // 恢复所有方块的缩放状态
+    setTimeout(() => {
+        const tiles = document.querySelectorAll('.klotski-tile');
+        tiles.forEach(tile => {
+            tile.style.transform = '';
+        });
+    }, 100);
     
     // 检查是否完成
     if (checkWin()) {

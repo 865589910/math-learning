@@ -4928,6 +4928,9 @@ footer {
     font-weight: bold;
     transition: all 0.3s;
     min-width: 60px;
+    position: relative;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .klotski-tile.klotski-empty {
@@ -4939,6 +4942,8 @@ footer {
     background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .klotski-tile.klotski-number:hover {
@@ -4955,11 +4960,13 @@ footer {
     color: #667eea;
     font-weight: bold;
     margin-bottom: 5px;
+    pointer-events: none;
 }
 
 .klotski-tile-icon {
     font-size: 2em;
     line-height: 1;
+    pointer-events: none;
 }
 
 /* 响应式优化 */
