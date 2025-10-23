@@ -1,6 +1,7 @@
 // 数字华容道游戏
+
 const klotskiState = {
-    difficulty: 3, // 3x3, 4x4, 5x5
+    difficulty: 3, // 3x3, 4x4, 5x5, 6x6
     grid: [],
     emptyPos: { row: 0, col: 0 },
     moves: 0,
@@ -11,16 +12,10 @@ const klotskiState = {
     bestRecords: {
         3: { moves: Infinity, time: Infinity, efficiency: Infinity },
         4: { moves: Infinity, time: Infinity, efficiency: Infinity },
-        5: { moves: Infinity, time: Infinity, efficiency: Infinity }
+        5: { moves: Infinity, time: Infinity, efficiency: Infinity },
+        6: { moves: Infinity, time: Infinity, efficiency: Infinity }
     }
 };
-
-// 动物贴纸图标（用于替代数字）
-const animalIcons = [
-    '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', 
-    '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦',
-    '🐤', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗'
-];
 
 // 打开游戏模态框
 function openKlotskiGame() {
@@ -35,7 +30,6 @@ function closeKlotskiGame() {
     const modal = document.getElementById('klotski-modal');
     modal.style.display = 'none';
     
-    // 停止计时
     if (klotskiState.timer) {
         clearInterval(klotskiState.timer);
         klotskiState.timer = null;
@@ -55,9 +49,7 @@ function backToKlotskiDifficulty() {
         klotskiState.timer = null;
     }
     
-    // 隐藏结果UI
     document.getElementById('klotski-result').style.display = 'none';
-    
     showKlotskiDifficulty();
 }
 
@@ -69,27 +61,20 @@ function selectKlotskiDifficulty(difficulty) {
 
 // 开始游戏
 function startKlotskiGame() {
-    // 重置状态
     klotskiState.moves = 0;
     klotskiState.timeElapsed = 0;
     klotskiState.gameOver = false;
     klotskiState.startTime = Date.now();
     
-    // 隐藏结果UI
     document.getElementById('klotski-result').style.display = 'none';
     
-    // 初始化网格
     initializeGrid();
     
-    // 显示游戏界面
     document.getElementById('klotski-difficulty-screen').style.display = 'none';
     document.getElementById('klotski-game-screen').style.display = 'block';
     
-    // 更新UI
     updateKlotskiUI();
     renderGrid();
-    
-    // 开始计时
     startTimer();
 }
 
@@ -98,13 +83,13 @@ function initializeGrid() {
     const size = klotskiState.difficulty;
     const numbers = [];
     
-    // 创建有序数组 1 到 size*size-1，最后一个是空格
+    // 创建数字数组 1 到 N*N-1，加上一个0（空位）
     for (let i = 1; i < size * size; i++) {
         numbers.push(i);
     }
-    numbers.push(0); // 0 代表空格
+    numbers.push(0);
     
-    // 打乱数组
+    // 打乱数组，直到可解
     do {
         shuffleArray(numbers);
     } while (!isSolvable(numbers, size));
@@ -128,6 +113,7 @@ function isSolvable(puzzle, size) {
     let inversions = 0;
     const flatPuzzle = puzzle.filter(n => n !== 0);
     
+    // 计算逆序数
     for (let i = 0; i < flatPuzzle.length; i++) {
         for (let j = i + 1; j < flatPuzzle.length; j++) {
             if (flatPuzzle[i] > flatPuzzle[j]) {
@@ -136,17 +122,17 @@ function isSolvable(puzzle, size) {
         }
     }
     
+    // 奇数尺寸：逆序数必须是偶数
     if (size % 2 === 1) {
-        // 奇数大小：逆序数必须是偶数
         return inversions % 2 === 0;
     } else {
-        // 偶数大小：逆序数+空格所在行（从底部算起）必须是奇数
-        const emptyRowFromBottom = size - puzzle.indexOf(0) / size;
+        // 偶数尺寸：逆序数 + 空位从底部算起的行数 必须是奇数
+        const emptyRowFromBottom = size - Math.floor(puzzle.indexOf(0) / size);
         return (inversions + emptyRowFromBottom) % 2 === 1;
     }
 }
 
-// 打乱数组
+// 打乱数组（Fisher-Yates洗牌算法）
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -171,17 +157,16 @@ function renderGrid() {
                 tile.className = 'klotski-tile klotski-empty';
             } else {
                 tile.className = 'klotski-tile klotski-number';
-                tile.innerHTML = `
-                    <div class="klotski-tile-number">${value}</div>
-                    <div class="klotski-tile-icon">${animalIcons[value - 1]}</div>
-                `;
-                // 添加点击和触摸事件
+                tile.textContent = value;
+                
+                // 点击事件
                 tile.onclick = () => moveTile(i, j);
+                
+                // 触摸事件优化
                 tile.ontouchend = (e) => {
                     e.preventDefault();
                     moveTile(i, j);
                 };
-                // 添加视觉反馈
                 tile.ontouchstart = (e) => {
                     e.preventDefault();
                     tile.style.transform = 'scale(0.95)';
@@ -215,14 +200,12 @@ function moveTile(row, col) {
     klotskiState.grid[row][col] = 0;
     klotskiState.emptyPos = { row, col };
     
-    // 增加步数
     klotskiState.moves++;
     
-    // 更新UI
     renderGrid();
     updateKlotskiUI();
     
-    // 恢复所有方块的缩放状态
+    // 恢复方块缩放
     setTimeout(() => {
         const tiles = document.querySelectorAll('.klotski-tile');
         tiles.forEach(tile => {
@@ -232,23 +215,23 @@ function moveTile(row, col) {
     
     // 检查是否完成
     if (checkWin()) {
-        winGame();
+        handleWin();
     }
 }
 
-// 检查是否获胜
+// 检查是否完成
 function checkWin() {
     const size = klotskiState.difficulty;
-    let expectedValue = 1;
+    let expected = 1;
     
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
             if (i === size - 1 && j === size - 1) {
-                // 最后一个格子应该是0（空格）
+                // 最后一个位置应该是0（空位）
                 if (klotskiState.grid[i][j] !== 0) return false;
             } else {
-                if (klotskiState.grid[i][j] !== expectedValue) return false;
-                expectedValue++;
+                if (klotskiState.grid[i][j] !== expected) return false;
+                expected++;
             }
         }
     }
@@ -256,74 +239,77 @@ function checkWin() {
     return true;
 }
 
-// 获胜
-function winGame() {
+// 处理胜利
+function handleWin() {
     klotskiState.gameOver = true;
     
-    // 停止计时
     if (klotskiState.timer) {
         clearInterval(klotskiState.timer);
         klotskiState.timer = null;
     }
     
-    const timeTaken = klotskiState.timeElapsed;
+    const timeTaken = Math.floor((Date.now() - klotskiState.startTime) / 1000);
     const moves = klotskiState.moves;
-    const efficiency = (timeTaken / moves).toFixed(2); // 秒/步
+    const efficiency = ((timeTaken / 60) * moves).toFixed(2);
     
     // 更新最佳记录
     const difficulty = klotskiState.difficulty;
-    let newRecord = false;
-    let recordType = [];
+    let newRecords = [];
     
     if (moves < klotskiState.bestRecords[difficulty].moves) {
         klotskiState.bestRecords[difficulty].moves = moves;
-        newRecord = true;
-        recordType.push('最少步数');
+        newRecords.push('🏆 最少步数');
     }
+    
     if (timeTaken < klotskiState.bestRecords[difficulty].time) {
         klotskiState.bestRecords[difficulty].time = timeTaken;
-        newRecord = true;
-        recordType.push('最快时间');
+        newRecords.push('⏱️ 最快时间');
     }
+    
     if (parseFloat(efficiency) < klotskiState.bestRecords[difficulty].efficiency) {
         klotskiState.bestRecords[difficulty].efficiency = parseFloat(efficiency);
-        newRecord = true;
-        recordType.push('最佳效率');
+        newRecords.push('⚡ 最佳效率');
     }
     
     saveBestRecords();
+    updateBestRecordsDisplay();
     
     // 显示结果
     const resultDiv = document.getElementById('klotski-result');
-    const difficultyName = ['', '', '', '简单(3×3)', '中等(4×4)', '困难(5×5)'][difficulty];
-    
-    let recordHTML = '';
-    if (newRecord) {
-        recordHTML = `<p class="new-record">🏆 刷新记录：${recordType.join('、')}！</p>`;
-    }
-    
-    resultDiv.innerHTML = `
-        <div class="result-success">
-            <div class="result-icon">🎉</div>
-            <div class="result-title">恭喜通关！</div>
-            <div class="result-stats">
-                <p>难度：${difficultyName}</p>
-                <p>用时：${formatTime(timeTaken)}</p>
-                <p>步数：${moves} 步</p>
-                <p>效率：${efficiency} 秒/步</p>
-                ${recordHTML}
-            </div>
+    let resultHTML = `
+        <h2>🎉 恭喜完成！</h2>
+        <div style="margin: 20px 0; font-size: 1.1em;">
+            <p>⏱️ 用时：${formatTime(timeTaken)}</p>
+            <p>👣 步数：${moves} 步</p>
+            <p>⚡ 效率：${efficiency}</p>
         </div>
     `;
-    resultDiv.style.display = 'block';
     
-    // 5秒后自动隐藏结果UI
-    setTimeout(() => {
-        resultDiv.style.display = 'none';
-    }, 5000);
+    if (newRecords.length > 0) {
+        resultHTML += `
+            <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 15px;">
+                <h3 style="margin-bottom: 10px;">🎊 打破记录！</h3>
+                <p>${newRecords.join('、')}</p>
+            </div>
+        `;
+    }
+    
+    resultHTML += `
+        <button onclick="restartKlotskiGame()" style="margin-top: 20px; padding: 12px 30px; font-size: 1.1em; border: none; border-radius: 25px; background: white; color: #667eea; cursor: pointer; font-weight: bold;">
+            🔄 再玩一次
+        </button>
+    `;
+    
+    resultDiv.innerHTML = resultHTML;
+    resultDiv.style.display = 'block';
 }
 
-// 开始计时
+// 重新开始游戏
+function restartKlotskiGame() {
+    startKlotskiGame();
+}
+
+// 启动计时器
 function startTimer() {
     if (klotskiState.timer) {
         clearInterval(klotskiState.timer);
@@ -341,26 +327,29 @@ function startTimer() {
 function updateKlotskiUI() {
     const difficultyNames = {
         3: '简单 (3×3)',
-        4: '中等 (4×4)',
-        5: '困难 (5×5)'
+        4: '普通 (4×4)',
+        5: '困难 (5×5)',
+        6: '极难 (6×6)'
     };
     
     document.getElementById('klotski-difficulty-name').textContent = difficultyNames[klotskiState.difficulty];
-    document.getElementById('klotski-moves').textContent = klotskiState.moves;
     document.getElementById('klotski-time').textContent = formatTime(klotskiState.timeElapsed);
-    
-    // 更新最佳记录显示
+    document.getElementById('klotski-moves').textContent = klotskiState.moves;
+}
+
+// 更新最佳记录显示
+function updateBestRecordsDisplay() {
     const difficulty = klotskiState.difficulty;
-    const bestMoves = klotskiState.bestRecords[difficulty].moves;
-    const bestTime = klotskiState.bestRecords[difficulty].time;
-    const bestEfficiency = klotskiState.bestRecords[difficulty].efficiency;
+    const records = klotskiState.bestRecords[difficulty];
     
     document.getElementById('klotski-best-moves').textContent = 
-        bestMoves === Infinity ? '--' : bestMoves;
+        records.moves === Infinity ? '--' : records.moves + ' 步';
+    
     document.getElementById('klotski-best-time').textContent = 
-        bestTime === Infinity ? '--' : formatTime(bestTime);
+        records.time === Infinity ? '--' : formatTime(records.time);
+    
     document.getElementById('klotski-best-efficiency').textContent = 
-        bestEfficiency === Infinity ? '--' : (bestEfficiency.toFixed(2) + ' 秒/步');
+        records.efficiency === Infinity ? '--' : records.efficiency;
 }
 
 // 格式化时间
@@ -370,39 +359,30 @@ function formatTime(seconds) {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-// 重新开始游戏
-function restartKlotskiGame() {
-    document.getElementById('klotski-result').style.display = 'none';
-    startKlotskiGame();
-}
-
-// 提示功能
-function showKlotskiHint() {
-    if (klotskiState.gameOver) return;
-    
-    alert('💡 提示：\n1. 尝试先完成第一行\n2. 然后完成第一列\n3. 逐步缩小问题规模\n4. 最后几个格子需要技巧！');
-}
-
-// 保存最佳记录到本地存储
-function saveBestRecords() {
-    localStorage.setItem('klotski-best-records', JSON.stringify(klotskiState.bestRecords));
-}
-
 // 加载最佳记录
 function loadBestRecords() {
-    const saved = localStorage.getItem('klotski-best-records');
-    if (saved) {
-        try {
-            const loaded = JSON.parse(saved);
-            // 确保每个难度都有 efficiency 字段
-            for (let level in loaded) {
-                if (!loaded[level].hasOwnProperty('efficiency')) {
-                    loaded[level].efficiency = Infinity;
-                }
-            }
-            klotskiState.bestRecords = loaded;
-        } catch (e) {
-            console.error('Failed to load best records:', e);
+    try {
+        const saved = localStorage.getItem('klotski-best-records');
+        if (saved) {
+            const records = JSON.parse(saved);
+            Object.assign(klotskiState.bestRecords, records);
         }
+    } catch (e) {
+        console.error('加载记录失败:', e);
     }
+    updateBestRecordsDisplay();
+}
+
+// 保存最佳记录
+function saveBestRecords() {
+    try {
+        localStorage.setItem('klotski-best-records', JSON.stringify(klotskiState.bestRecords));
+    } catch (e) {
+        console.error('保存记录失败:', e);
+    }
+}
+
+// 提示功能（暂未实现）
+function showKlotskiHint() {
+    alert('提示功能开发中...\n\n💡 小技巧：\n1. 从上往下逐行排列\n2. 利用角落进行循环移动\n3. 提前规划移动路径');
 }
